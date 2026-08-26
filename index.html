@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="gl">
 <head>
     <meta charset="UTF-8" />
@@ -6,195 +6,1165 @@
     <title>Jeopardy - Mitoloxía Galega</title>
     <style>
         * { box-sizing: border-box; }
+
         :root{
             --accent:#d4af37;
-            --bg-1:#071b13; --bg-2:#123d2b;
-            --card:#164d36; --cat:#0d3022;
-            --q:#1769aa; --q-hover:#2189d0;
+            --bg-1:#071b13;
+            --bg-2:#123d2b;
+            --card:#164d36;
+            --cat:#0d3022;
+            --q:#1769aa;
+            --q-hover:#2189d0;
         }
+
         html,body{height:100%;}
+
         body {
-            margin: 0; font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, Arial, sans-serif;
             background: linear-gradient(135deg,var(--bg-1),var(--bg-2),var(--bg-1));
-            color: #fff; min-height: 100vh; -webkit-font-smoothing:antialiased;
+            color: #fff;
+            min-height: 100vh;
+            -webkit-font-smoothing:antialiased;
         }
-        header{ text-align:center; padding:28px 12px 6px; }
-        h1{ margin:0; color:var(--accent); font-size:40px; text-shadow:2px 2px 6px #000; }
-        .subtitle{ margin-top:6px; color:#d8eadf; font-size:16px }
 
-        .controls{ max-width:1200px; margin:14px auto; padding:0 16px; display:flex; gap:10px; align-items:center; justify-content:flex-end }
-        .controls button{ background:var(--accent); color:#071b13; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer }
+        header{
+            text-align:center;
+            padding:28px 12px 6px;
+        }
 
-        #teams{ display:grid; grid-template-columns:repeat(6,1fr); gap:12px; padding:18px; max-width:1200px; margin:0 auto }
-        .team{ background:var(--card); border:2px solid var(--accent); border-radius:10px; padding:8px; text-align:center }
-        .team input{ width:100%; background:transparent; border:none; color:white; text-align:center; font-weight:700; font-size:14px }
-        .score{ font-size:22px; color:var(--accent); margin:8px 0 }
-        .team .small{ display:flex; gap:6px; justify-content:center }
-        .team button{ background:transparent; border:2px solid var(--accent); color:var(--accent); padding:6px 8px; border-radius:6px; cursor:pointer }
+        h1{
+            margin:0;
+            color:var(--accent);
+            font-size:40px;
+            text-shadow:2px 2px 6px #000;
+        }
 
-        #board{ display:grid; grid-template-columns:repeat(5,1fr); gap:10px; max-width:1200px; margin:18px auto 40px; padding:0 18px }
-        .category{ background:var(--cat); border:2px solid var(--accent); padding:14px 6px; text-align:center; font-weight:800; min-height:66px; display:flex; align-items:center; justify-content:center }
+        .subtitle{
+            margin-top:6px;
+            color:#d8eadf;
+            font-size:16px;
+        }
 
-        .question-btn{ background:var(--q); color:var(--accent); border:2px solid #8ecae6; border-radius:8px; min-height:74px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:800; cursor:pointer; transition:transform .15s, background .15s }
-        .question-btn:hover{ background:var(--q-hover); transform:translateY(-3px) }
-        .question-btn[aria-disabled="true"]{ background:#333; color:#777; border-color:#555; cursor:default; transform:none }
+        .controls{
+            max-width:1200px;
+            margin:14px auto;
+            padding:0 16px;
+            display:flex;
+            gap:10px;
+            align-items:center;
+            justify-content:flex-end;
+        }
 
-        #modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.85); justify-content:center; align-items:center; padding:18px; z-index:20 }
-        .modal-box{ background:linear-gradient(145deg,var(--bg-2),var(--bg-1)); border:3px solid var(--accent); border-radius:14px; padding:26px; max-width:760px; width:100%; text-align:center; box-shadow:0 0 30px #000 }
-        .points{ color:var(--accent); font-size:22px; font-weight:800 }
-        #questionText{ font-size:20px; margin:18px 0; line-height:1.4 }
-        #answer{ display:none; background:#e9f5ec; color:#123d2b; border-radius:10px; padding:14px; margin:14px 0; font-size:18px; font-weight:700 }
-        .modal-row{ display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap }
-        .modal-row select, .modal-row button{ padding:10px 12px; border-radius:8px; border:none; font-weight:700 }
-        .btn-show{ background:var(--accent); color:#071b13 }
-        .btn-close{ background:#b23a48; color:#fff }
-        .btn-award{ background:#2f9e44; color:#fff }
-        .btn-sub{ background:#d9534f; color:#fff }
+        .controls button{
+            background:var(--accent);
+            color:#071b13;
+            border:none;
+            padding:8px 12px;
+            border-radius:8px;
+            font-weight:700;
+            cursor:pointer;
+        }
 
-        @media (max-width:900px){ #teams{ grid-template-columns:repeat(3,1fr) } h1{ font-size:30px } }
-        @media (max-width:600px){ #teams{ grid-template-columns:repeat(2,1fr) } #board{ grid-template-columns:repeat(5,minmax(92px,1fr)); overflow-x:auto } }
+        #teams{
+            display:grid;
+            grid-template-columns:repeat(6,1fr);
+            gap:12px;
+            padding:18px;
+            max-width:1200px;
+            margin:0 auto;
+        }
+
+        .team{
+            background:var(--card);
+            border:2px solid var(--accent);
+            border-radius:10px;
+            padding:8px;
+            text-align:center;
+        }
+
+        .team input{
+            width:100%;
+            background:transparent;
+            border:none;
+            color:white;
+            text-align:center;
+            font-weight:700;
+            font-size:14px;
+        }
+
+        .score{
+            font-size:22px;
+            color:var(--accent);
+            margin:8px 0;
+        }
+
+        .team .small{
+            display:flex;
+            gap:6px;
+            justify-content:center;
+        }
+
+        .team button{
+            background:transparent;
+            border:2px solid var(--accent);
+            color:var(--accent);
+            padding:6px 8px;
+            border-radius:6px;
+            cursor:pointer;
+        }
+
+        #board{
+            display:grid;
+            grid-template-columns:repeat(5,1fr);
+            gap:10px;
+            max-width:1200px;
+            margin:18px auto 40px;
+            padding:0 18px;
+        }
+
+        .category{
+            background:var(--cat);
+            border:2px solid var(--accent);
+            padding:14px 6px;
+            text-align:center;
+            font-weight:800;
+            min-height:66px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+        }
+
+        .question-btn{
+            background:var(--q);
+            color:var(--accent);
+            border:2px solid #8ecae6;
+            border-radius:8px;
+            min-height:74px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:22px;
+            font-weight:800;
+            cursor:pointer;
+            transition:transform .15s, background .15s;
+        }
+
+        .question-btn:hover{
+            background:var(--q-hover);
+            transform:translateY(-3px);
+        }
+
+        .question-btn[aria-disabled="true"]{
+            background:#333;
+            color:#777;
+            border-color:#555;
+            cursor:default;
+            transform:none;
+        }
+
+        #modal{
+            display:none;
+            position:fixed;
+            inset:0;
+            background:rgba(0,0,0,.85);
+            justify-content:center;
+            align-items:center;
+            padding:18px;
+            z-index:20;
+        }
+
+        .modal-box{
+            background:linear-gradient(145deg,var(--bg-2),var(--bg-1));
+            border:3px solid var(--accent);
+            border-radius:14px;
+            padding:26px;
+            max-width:760px;
+            width:100%;
+            text-align:center;
+            box-shadow:0 0 30px #000;
+        }
+
+        .points{
+            color:var(--accent);
+            font-size:22px;
+            font-weight:800;
+        }
+
+        #questionText{
+            font-size:20px;
+            margin:18px 0;
+            line-height:1.4;
+        }
+
+        #answer{
+            display:none;
+            background:#e9f5ec;
+            color:#123d2b;
+            border-radius:10px;
+            padding:14px;
+            margin:14px 0;
+            font-size:18px;
+            font-weight:700;
+        }
+
+        .modal-row{
+            display:flex;
+            gap:8px;
+            align-items:center;
+            justify-content:center;
+            flex-wrap:wrap;
+        }
+
+        .modal-row select,
+        .modal-row button{
+            padding:10px 12px;
+            border-radius:8px;
+            border:none;
+            font-weight:700;
+        }
+
+        .btn-show{
+            background:var(--accent);
+            color:#071b13;
+        }
+
+        .btn-close{
+            background:#b23a48;
+            color:#fff;
+        }
+
+        .btn-award{
+            background:#2f9e44;
+            color:#fff;
+        }
+
+        .btn-sub{
+            background:#d9534f;
+            color:#fff;
+        }
+
+        @media (max-width:900px){
+            #teams{
+                grid-template-columns:repeat(3,1fr);
+            }
+
+            h1{
+                font-size:30px;
+            }
+        }
+
+        @media (max-width:600px){
+            #teams{
+                grid-template-columns:repeat(2,1fr);
+            }
+
+            #board{
+                grid-template-columns:repeat(5,minmax(92px,1fr));
+                overflow-x:auto;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <header>
-        <h1>🧙 MITOLOXÍA GALEGA</h1>
-        <div class="subtitle">Jeopardy · 1º ESO</div>
-    </header>
 
-    <div class="controls">
-        <button id="resetScores">Reiniciar puntuacións</button>
-        <button id="resetBoard">Reiniciar tablero</button>
-    </div>
+<header>
+    <h1>🧙 MITOLOXÍA GALEGA</h1>
+    <div class="subtitle">Jeopardy · 1º ESO</div>
+</header>
 
-    <section id="teams" aria-label="Equipos"></section>
-    <section id="board" aria-label="Taboleiro"></section>
+<div class="controls">
+    <button id="resetScores">Reiniciar puntuacións</button>
+    <button id="resetBoard">Reiniciar taboleiro</button>
+</div>
 
-    <div id="modal" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="modal-box">
-            <div class="points" id="modalPoints"></div>
-            <div id="questionText"></div>
-            <div id="answer" aria-live="polite"></div>
+<section id="teams" aria-label="Equipos"></section>
+<section id="board" aria-label="Taboleiro"></section>
 
-            <div class="modal-row" style="margin-top:12px">
-                <button class="btn-show" id="btnShow">👁️ Ver resposta</button>
-                <select id="teamSelect" aria-label="Equipo a puntuar"></select>
-                <button class="btn-award" id="btnAward">+ Puntos</button>
-                <button class="btn-sub" id="btnSub">- Puntos</button>
-                <button class="btn-close" id="btnClose">↩️ Volver ao taboleiro</button>
-            </div>
+<div id="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-box">
+
+        <div class="points" id="modalPoints"></div>
+
+        <div id="questionText"></div>
+
+        <div id="answer" aria-live="polite"></div>
+
+        <div class="modal-row" style="margin-top:12px">
+            <button class="btn-show" id="btnShow">
+                👁️ Ver resposta
+            </button>
+
+            <select id="teamSelect" aria-label="Equipo a puntuar"></select>
+
+            <button class="btn-award" id="btnAward">
+                + Puntos
+            </button>
+
+            <button class="btn-sub" id="btnSub">
+                - Puntos
+            </button>
+
+            <button class="btn-close" id="btnClose">
+                ↩️ Volver ao taboleiro
+            </button>
         </div>
     </div>
+</div>
 
-    <script>
-        const categories = ["🧙 SERES","🌲 CARACTERÍSTICAS","🌊 LUGARES","📖 LENDAS","🔮 QUEN SON?"];
-        const questions = [
-            [["Como se chama o ser feminino relacionado coas augas dos ríos e fontes?","A moura."],["Que ser mitolóxico galego é coñecido por facer trasnadas?","O trasno."],["Que ser pode transformarse nun lobo?","O lobishome."],["Que ser fantástico adoita vivir nas casas e facer pequenas trasnadas?","O trasno."],["Con que elementos naturais están relacionadas moitas lendas das mouras?","Fontes, ríos, covas e castros."]],
-            [["Que ser mitolóxico é famoso por facer trasnadas?","O trasno."],["Que criatura está relacionada coa transformación dunha persoa en lobo?","O lobishome."],["As mouras aparecen frecuentemente relacionadas con tesouros. Verdadeiro ou falso?","Verdadeiro."],["Que característica define o trasno?","É pequeno e traveso."],["Que característica fantástica define principalmente o lobishome?","A transformación dunha persoa en lobo."]],
-            [["Onde podemos atopar moitas lendas sobre mouras?","En fontes, ríos, covas e castros."],["Que lugar da natureza aparece frecuentemente nas historias dos seres mitolóxicos galegos?","Os bosques."],["Que construcións antigas aparecen relacionadas con moitas lendas de mouras?","Os castros."],["As fontes son lugares importantes na mitoloxía galega. Verdadeiro ou falso?","Verdadeiro."],["Que lugares aparecen con frecuencia nas lendas sobre seres mitolóxicos galegos?","Fontes, ríos, bosques, covas e castros."]],
-            [["Que é unha lenda?","Un relato tradicional que combina elementos reais e fantásticos."],["As lendas transmitíronse de xeración en xeración. Verdadeiro ou falso?","Verdadeiro."],["Que elemento aparece con frecuencia nas lendas das mouras?","Os tesouros."],["Que animal está relacionado coa transformación do lobishome?","O lobo."],["Por que son importantes as lendas para coñecer a cultura galega?","Porque conservan crenzas, historias e costumes transmitidos ao longo das xeracións."]],
-            [["Son pequeno, traveso e gústame facer trasnadas. Quen son?","O trasno."],["Vivo relacionado coa auga e podo aparecer preto dunha fonte. Quen son?","A moura."],["Son unha persoa que pode transformarse en lobo. Quen son?","O lobishome."],["Estou relacionado con lugares antigos como castros e covas e podo gardar un tesouro. Quen son?","A moura."],["Son un ser fantástico da tradición popular galega e vivo no mundo das lendas. Quen son?","Un ser da mitoloxía galega."]]
-        ];
-        const values = [100,200,300,400,500];
+<script>
 
-        let teams = Array.from({length:6}, (_,i)=>({name:`Equipo ${i+1}`, score:0}));
-        let currentQuestion = null;
+    /* =========================================================
+       CATEGORÍAS
+       ========================================================= */
 
-        // Persistence
-        function saveState(){
-            const state = {teams, used: getUsedMap()};
-            try{ localStorage.setItem('jeopardy-state', JSON.stringify(state)); }catch(e){ /* ignore */ }
+    const categories = [
+        "🧙 SERES",
+        "🌲 CARACTERÍSTICAS",
+        "🌊 LUGARES",
+        "⚡ PODERES E ENIGMAS",
+        "🔮 QUEN SON?"
+    ];
+
+
+    /* =========================================================
+       PREGUNTAS
+       5 categorías × 5 preguntas
+       ========================================================= */
+
+    const questions = [
+
+        /* =====================================================
+           CATEGORÍA 1 — SERES
+           ===================================================== */
+
+        [
+            [
+                "Que ser mitolóxico galego é coñecido por facer trasnadas?",
+                "O trasno."
+            ],
+
+            [
+                "Como se chama a procesión nocturna formada por ánimas que percorre os camiños?",
+                "A Santa Compaña."
+            ],
+
+            [
+                "Que ser mitolóxico está relacionado coas tormentas e os fenómenos atmosféricos?",
+                "O nubeiro."
+            ],
+
+            [
+                "Como se chaman as criaturas femininas relacionadas coa auga, especialmente cos ríos?",
+                "As xacias."
+            ],
+
+            [
+                "Que ser fantástico galego está relacionado co mar e aparece nalgunhas lendas como un ser mariño?",
+                "O urco."
+            ]
+        ],
+
+
+        /* =====================================================
+           CATEGORÍA 2 — CARACTERÍSTICAS
+           ===================================================== */
+
+        [
+            [
+                "Que característica define principalmente o trasno?",
+                "É pequeno, traveso e gústalle facer trasnadas."
+            ],
+
+            [
+                "Que característica sobrenatural distingue o lobishome?",
+                "Pode transformarse nun lobo."
+            ],
+
+            [
+                "Que se atribúe tradicionalmente ás meigas?",
+                "Poderes máxicos ou sobrenaturais."
+            ],
+
+            [
+                "Con que fenómeno meteorolóxico se relaciona o nubeiro?",
+                "Coas tormentas, treboadas e outros fenómenos atmosféricos."
+            ],
+
+            [
+                "Que característica distingue especialmente ás xacias?",
+                "A súa relación coa auga e cos ríos."
+            ]
+        ],
+
+
+        /* =====================================================
+           CATEGORÍA 3 — LUGARES
+           ===================================================== */
+
+        [
+            [
+                "Que lugar natural aparece frecuentemente relacionado coas mouras?",
+                "As fontes."
+            ],
+
+            [
+                "Que construcións antigas aparecen en moitas lendas galegas?",
+                "Os castros."
+            ],
+
+            [
+                "Que lugares naturais poden estar relacionados coas xacias?",
+                "Os ríos e outras zonas con auga."
+            ],
+
+            [
+                "En que tipo de lugares se poden situar as historias sobre a Santa Compaña?",
+                "En camiños, aldeas e lugares solitarios, especialmente pola noite."
+            ],
+
+            [
+                "Nomea polo menos catro lugares que aparecen frecuentemente nas lendas de seres mitolóxicos galegos.",
+                "Fontes, ríos, bosques, covas e castros. Calquera catro son válidos."
+            ]
+        ],
+
+
+        /* =====================================================
+           CATEGORÍA 4 — PODERES E ENIGMAS
+           ===================================================== */
+
+        [
+            [
+                "Que poder fantástico ten o lobishome?",
+                "Pode transformarse en lobo."
+            ],
+
+            [
+                "Que poder ou característica sobrenatural se atribúe ás meigas?",
+                "A capacidade de facer maxia ou empregar poderes sobrenaturais."
+            ],
+
+            [
+                "Que relación teñen os nubeiros cos fenómenos do ceo?",
+                "Segundo a tradición, poden provocar ou controlar tormentas e treboadas."
+            ],
+
+            [
+                "Que elemento fantástico aparece con frecuencia nas historias das mouras?",
+                "Os encantamentos e os tesouros."
+            ],
+
+            [
+                "Que ser da mitoloxía galega está asociado ás almas dos mortos que aparecen nunha procesión nocturna?",
+                "A Santa Compaña."
+            ]
+        ],
+
+
+        /* =====================================================
+           CATEGORÍA 5 — QUEN SON?
+           ===================================================== */
+
+        [
+            [
+                "Son pequeno, traveso e vivo relacionado coas casas. Gústame facer bromas. Quen son?",
+                "O trasno."
+            ],
+
+            [
+                "Estou relacionado coa auga e podo aparecer preto dun río. Quen son?",
+                "Unha xacia."
+            ],
+
+            [
+                "Son unha persoa que pode transformarse nun animal parecido ao lobo. Quen son?",
+                "O lobishome."
+            ],
+
+            [
+                "Estou relacionado coas tormentas e co ceo. Segundo a tradición, podo provocar treboadas. Quen son?",
+                "O nubeiro."
+            ],
+
+            [
+                "Percorro os camiños pola noite formando unha procesión de ánimas. Quen son?",
+                "A Santa Compaña."
+            ]
+        ]
+
+    ];
+
+
+    /* =========================================================
+       VALORES
+       ========================================================= */
+
+    const values = [100,200,300,400,500];
+
+
+    /* =========================================================
+       EQUIPOS
+       ========================================================= */
+
+    let teams = Array.from(
+        {length:6},
+        (_,i)=>({
+            name:`Equipo ${i+1}`,
+            score:0
+        })
+    );
+
+    let currentQuestion = null;
+
+
+    /* =========================================================
+       GARDADO
+       ========================================================= */
+
+    function saveState(){
+
+        const state = {
+            teams,
+            used:getUsedMap()
+        };
+
+        try{
+            localStorage.setItem(
+                'jeopardy-state',
+                JSON.stringify(state)
+            );
+        }catch(e){
+            /* Ignorar erros de localStorage */
         }
-        function loadState(){
-            try{
-                const raw = localStorage.getItem('jeopardy-state');
-                if(!raw) return;
-                const state = JSON.parse(raw);
-                if(state.teams) teams = state.teams;
-                if(state.used) window._usedMap = state.used;
-            }catch(e){ console.warn('load error',e) }
-        }
+    }
 
-        function getUsedMap(){
-            const map = {};
-            document.querySelectorAll('.question-btn').forEach(btn=>{ map[btn.dataset.col+'-'+btn.dataset.row] = btn.getAttribute('aria-disabled') === 'true'; });
-            return map;
-        }
 
-        function createTeams(){
-            const container = document.getElementById('teams'); container.innerHTML='';
-            teams.forEach((team,idx)=>{
-                const div = document.createElement('div'); div.className='team';
-                div.innerHTML = `
-                    <input aria-label="Nome equipo ${idx+1}" value="${escapeHtml(team.name)}" onchange="renameTeam(${idx}, this.value)">
-                    <div class="score" id="score-${idx}">${team.score}</div>
-                    <div class="small">
-                        <button onclick="changeScore(${idx}, ${values[0]})">+${values[0]}</button>
-                        <button onclick="changeScore(${idx}, -${values[0]})">-${values[0]}</button>
-                    </div>`;
-                container.appendChild(div);
+    function loadState(){
+
+        try{
+
+            const raw =
+                localStorage.getItem('jeopardy-state');
+
+            if(!raw) return;
+
+            const state =
+                JSON.parse(raw);
+
+            if(state.teams)
+                teams = state.teams;
+
+            if(state.used)
+                window._usedMap = state.used;
+
+        }catch(e){
+
+            console.warn(
+                'Erro ao cargar estado',
+                e
+            );
+        }
+    }
+
+
+    /* =========================================================
+       MAPA DE PREGUNTAS USADAS
+       ========================================================= */
+
+    function getUsedMap(){
+
+        const map = {};
+
+        document
+            .querySelectorAll('.question-btn')
+            .forEach(btn=>{
+
+                map[
+                    btn.dataset.col +
+                    '-' +
+                    btn.dataset.row
+                ] =
+                    btn.getAttribute(
+                        'aria-disabled'
+                    ) === 'true';
+
             });
-            populateTeamSelect();
-        }
 
-        function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+        return map;
+    }
 
-        function renameTeam(i,name){ teams[i].name = name || `Equipo ${i+1}`; saveState(); createTeams(); }
-        function changeScore(i,amt){ teams[i].score = (teams[i].score||0) + amt; document.getElementById('score-'+i).textContent = teams[i].score; saveState(); }
 
-        function createBoard(){
-            const board = document.getElementById('board'); board.innerHTML='';
-            categories.forEach(cat=>{ const d=document.createElement('div'); d.className='category'; d.textContent=cat; board.appendChild(d); });
+    /* =========================================================
+       EQUIPOS
+       ========================================================= */
 
-            for(let row=0; row<5; row++){
-                for(let col=0; col<5; col++){
-                    const btn = document.createElement('button');
-                    btn.className='question-btn';
-                    btn.type='button';
-                    btn.dataset.col = col; btn.dataset.row = row;
-                    btn.textContent = values[row];
-                    btn.setAttribute('aria-label', `${categories[col]} - ${values[row]} puntos`);
-                    btn.addEventListener('click', ()=> openQuestion(col,row,btn));
-                    btn.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') { e.preventDefault(); btn.click(); } });
-                    board.appendChild(btn);
-                }
+    function createTeams(){
+
+        const container =
+            document.getElementById('teams');
+
+        container.innerHTML='';
+
+        teams.forEach((team,idx)=>{
+
+            const div =
+                document.createElement('div');
+
+            div.className='team';
+
+            div.innerHTML = `
+
+                <input
+                    aria-label="Nome equipo ${idx+1}"
+                    value="${escapeHtml(team.name)}"
+                    onchange="renameTeam(${idx}, this.value)"
+                >
+
+                <div
+                    class="score"
+                    id="score-${idx}"
+                >
+                    ${team.score}
+                </div>
+
+                <div class="small">
+
+                    <button
+                        onclick="changeScore(${idx}, ${values[0]})"
+                    >
+                        +${values[0]}
+                    </button>
+
+                    <button
+                        onclick="changeScore(${idx}, -${values[0]})"
+                    >
+                        -${values[0]}
+                    </button>
+
+                </div>
+
+            `;
+
+            container.appendChild(div);
+
+        });
+
+        populateTeamSelect();
+    }
+
+
+    function escapeHtml(s){
+
+        return String(s)
+            .replace(/&/g,'&amp;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;');
+
+    }
+
+
+    function renameTeam(i,name){
+
+        teams[i].name =
+            name ||
+            `Equipo ${i+1}`;
+
+        saveState();
+        createTeams();
+    }
+
+
+    function changeScore(i,amt){
+
+        teams[i].score =
+            (teams[i].score || 0) +
+            amt;
+
+        document
+            .getElementById(`score-${i}`)
+            .textContent =
+            teams[i].score;
+
+        populateTeamSelect();
+
+        saveState();
+    }
+
+
+    /* =========================================================
+       CREAR TABOLEIRO
+       ========================================================= */
+
+    function createBoard(){
+
+        const board =
+            document.getElementById('board');
+
+        board.innerHTML='';
+
+
+        /* Categorías */
+
+        categories.forEach(cat=>{
+
+            const d =
+                document.createElement('div');
+
+            d.className='category';
+
+            d.textContent=cat;
+
+            board.appendChild(d);
+
+        });
+
+
+        /* Preguntas */
+
+        for(let row=0; row<5; row++){
+
+            for(let col=0; col<5; col++){
+
+                const btn =
+                    document.createElement('button');
+
+                btn.className='question-btn';
+
+                btn.type='button';
+
+                btn.dataset.col=col;
+                btn.dataset.row=row;
+
+                btn.textContent =
+                    values[row];
+
+                btn.setAttribute(
+                    'aria-label',
+                    `${categories[col]} - ${values[row]} puntos`
+                );
+
+                btn.addEventListener(
+                    'click',
+                    ()=>{
+                        openQuestion(
+                            col,
+                            row,
+                            btn
+                        );
+                    }
+                );
+
+                btn.addEventListener(
+                    'keydown',
+                    (e)=>{
+
+                        if(
+                            e.key==='Enter' ||
+                            e.key===' '
+                        ){
+
+                            e.preventDefault();
+                            btn.click();
+
+                        }
+
+                    }
+                );
+
+                board.appendChild(btn);
+
             }
-            // restore used
-            if(window._usedMap){ Object.entries(window._usedMap).forEach(([key,val])=>{ const [col,row]=key.split('-'); const sel = document.querySelector(`.question-btn[data-col="${col}"][data-row="${row}"]`); if(sel && val) markUsed(sel); }); }
+
         }
 
-        function markUsed(btn){ btn.setAttribute('aria-disabled','true'); btn.disabled = true; }
 
-        function openQuestion(col,row,btn){ if(btn.getAttribute('aria-disabled')==='true') return; markUsed(btn); currentQuestion = {question: questions[col][row][0], answer: questions[col][row][1], points: values[row], col, row};
-            document.getElementById('modalPoints').textContent = currentQuestion.points + ' puntos';
-            document.getElementById('questionText').textContent = currentQuestion.question;
-            const ans = document.getElementById('answer'); ans.textContent = '✅ ' + currentQuestion.answer; ans.style.display='none';
-            const modal = document.getElementById('modal'); modal.style.display='flex'; modal.setAttribute('aria-hidden','false'); document.getElementById('btnShow').focus();
-            saveState();
+        /* Recuperar preguntas xa utilizadas */
+
+        if(window._usedMap){
+
+            Object.entries(
+                window._usedMap
+            ).forEach(
+                ([key,val])=>{
+
+                    const [col,row] =
+                        key.split('-');
+
+                    const sel =
+                        document.querySelector(
+                            `.question-btn[data-col="${col}"][data-row="${row}"]`
+                        );
+
+                    if(sel && val)
+                        markUsed(sel);
+
+                }
+            );
+
         }
 
-        document.getElementById('btnShow').addEventListener('click', ()=>{ document.getElementById('answer').style.display='block'; });
-        document.getElementById('btnClose').addEventListener('click', closeQuestion);
-        document.getElementById('btnAward').addEventListener('click', ()=>{ const t = Number(document.getElementById('teamSelect').value); if(Number.isInteger(t)) changeScore(t, currentQuestion.points); closeQuestion(); });
-        document.getElementById('btnSub').addEventListener('click', ()=>{ const t = Number(document.getElementById('teamSelect').value); if(Number.isInteger(t)) changeScore(t, -currentQuestion.points); closeQuestion(); });
+    }
 
-        function populateTeamSelect(){ const sel = document.getElementById('teamSelect'); sel.innerHTML=''; teams.forEach((t,i)=>{ const o = document.createElement('option'); o.value=i; o.textContent = `${t.name} (${t.score})`; sel.appendChild(o); }); }
 
-        function closeQuestion(){ const modal = document.getElementById('modal'); modal.style.display='none'; modal.setAttribute('aria-hidden','true'); currentQuestion=null; saveState(); }
+    function markUsed(btn){
 
-        // Reset controls
-        document.getElementById('resetScores').addEventListener('click', ()=>{ teams.forEach(t=>t.score=0); saveState(); createTeams(); });
-        document.getElementById('resetBoard').addEventListener('click', ()=>{ if(confirm('Reiniciar o tablero e liberar todas as preguntas?')){ document.querySelectorAll('.question-btn').forEach(b=>{ b.removeAttribute('aria-disabled'); b.disabled=false; }); window._usedMap = {}; saveState(); } });
+        btn.setAttribute(
+            'aria-disabled',
+            'true'
+        );
 
-        // keyboard: Esc to close
-        document.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ const m = document.getElementById('modal'); if(m.style.display==='flex') closeQuestion(); } });
+        btn.disabled=true;
+    }
 
-        // load and init
-        loadState(); createTeams(); createBoard();
 
-        // expose for inline handlers used by generated HTML
-        window.renameTeam = renameTeam; window.changeScore = changeScore; window.getState = ()=>({teams, used:getUsedMap()});
+    /* =========================================================
+       ABRIR PREGUNTA
+       ========================================================= */
 
-    </script>
+    function openQuestion(
+        col,
+        row,
+        btn
+    ){
+
+        if(
+            btn.getAttribute(
+                'aria-disabled'
+            ) === 'true'
+        )
+            return;
+
+
+        markUsed(btn);
+
+
+        currentQuestion = {
+
+            question:
+                questions[col][row][0],
+
+            answer:
+                questions[col][row][1],
+
+            points:
+                values[row],
+
+            col,
+            row
+
+        };
+
+
+        document
+            .getElementById('modalPoints')
+            .textContent =
+            currentQuestion.points +
+            ' puntos';
+
+
+        document
+            .getElementById('questionText')
+            .textContent =
+            currentQuestion.question;
+
+
+        const ans =
+            document.getElementById('answer');
+
+        ans.textContent =
+            '✅ ' +
+            currentQuestion.answer;
+
+        ans.style.display='none';
+
+
+        const modal =
+            document.getElementById('modal');
+
+        modal.style.display='flex';
+
+        modal.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+
+
+        document
+            .getElementById('btnShow')
+            .focus();
+
+
+        saveState();
+    }
+
+
+    /* =========================================================
+       BOTÓNS DA PREGUNTA
+       ========================================================= */
+
+    document
+        .getElementById('btnShow')
+        .addEventListener(
+            'click',
+            ()=>{
+                document
+                    .getElementById('answer')
+                    .style.display='block';
+            }
+        );
+
+
+    document
+        .getElementById('btnClose')
+        .addEventListener(
+            'click',
+            closeQuestion
+        );
+
+
+    document
+        .getElementById('btnAward')
+        .addEventListener(
+            'click',
+            ()=>{
+
+                const t =
+                    Number(
+                        document
+                            .getElementById(
+                                'teamSelect'
+                            )
+                            .value
+                    );
+
+                if(
+                    Number.isInteger(t) &&
+                    currentQuestion
+                ){
+
+                    changeScore(
+                        t,
+                        currentQuestion.points
+                    );
+
+                }
+
+                closeQuestion();
+
+            }
+        );
+
+
+    document
+        .getElementById('btnSub')
+        .addEventListener(
+            'click',
+            ()=>{
+
+                const t =
+                    Number(
+                        document
+                            .getElementById(
+                                'teamSelect'
+                            )
+                            .value
+                    );
+
+                if(
+                    Number.isInteger(t) &&
+                    currentQuestion
+                ){
+
+                    changeScore(
+                        t,
+                        -currentQuestion.points
+                    );
+
+                }
+
+                closeQuestion();
+
+            }
+        );
+
+
+    /* =========================================================
+       SELECT DE EQUIPOS
+       ========================================================= */
+
+    function populateTeamSelect(){
+
+        const sel =
+            document.getElementById(
+                'teamSelect'
+            );
+
+        sel.innerHTML='';
+
+        teams.forEach((t,i)=>{
+
+            const o =
+                document.createElement(
+                    'option'
+                );
+
+            o.value=i;
+
+            o.textContent =
+                `${t.name} (${t.score})`;
+
+            sel.appendChild(o);
+
+        });
+
+    }
+
+
+    /* =========================================================
+       PECHAR PREGUNTA
+       ========================================================= */
+
+    function closeQuestion(){
+
+        const modal =
+            document.getElementById(
+                'modal'
+            );
+
+        modal.style.display='none';
+
+        modal.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
+        currentQuestion=null;
+
+        saveState();
+    }
+
+
+    /* =========================================================
+       REINICIAR PUNTUACIÓNS
+       ========================================================= */
+
+    document
+        .getElementById(
+            'resetScores'
+        )
+        .addEventListener(
+            'click',
+            ()=>{
+
+                teams.forEach(
+                    t=>t.score=0
+                );
+
+                saveState();
+
+                createTeams();
+
+            }
+        );
+
+
+    /* =========================================================
+       REINICIAR TABOLEIRO
+       ========================================================= */
+
+    document
+        .getElementById(
+            'resetBoard'
+        )
+        .addEventListener(
+            'click',
+            ()=>{
+
+                if(
+                    confirm(
+                        'Reiniciar o taboleiro e liberar todas as preguntas?'
+                    )
+                ){
+
+                    document
+                        .querySelectorAll(
+                            '.question-btn'
+                        )
+                        .forEach(b=>{
+
+                            b.removeAttribute(
+                                'aria-disabled'
+                            );
+
+                            b.disabled=false;
+
+                        });
+
+
+                    window._usedMap={};
+
+                    saveState();
+
+                }
+
+            }
+        );
+
+
+    /* =========================================================
+       ESC PARA PECHAR
+       ========================================================= */
+
+    document.addEventListener(
+        'keydown',
+        (e)=>{
+
+            if(e.key==='Escape'){
+
+                const m =
+                    document.getElementById(
+                        'modal'
+                    );
+
+                if(
+                    m.style.display==='flex'
+                )
+                    closeQuestion();
+
+            }
+
+        }
+    );
+
+
+    /* =========================================================
+       INICIALIZACIÓN
+       ========================================================= */
+
+    loadState();
+
+    createTeams();
+
+    createBoard();
+
+
+    /* Expor funcións */
+
+    window.renameTeam =
+        renameTeam;
+
+    window.changeScore =
+        changeScore;
+
+    window.getState =
+        ()=>({
+            teams,
+            used:getUsedMap()
+        });
+
+</script>
+
 </body>
 </html>
-
